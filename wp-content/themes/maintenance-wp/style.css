@@ -1,0 +1,29 @@
+/*
+Theme Name: Maintenance-WP
+Description: Theme enfant de Divi
+Author: Julien - WebMate
+Author URI: https://www.webmate.fr
+Template: Divi 
+Version: 1
+*/
+
+ #particles-js h1{
+color: white;
+font-weight: bold;
+text-align: center;
+display: block;
+position: absolute;
+top: 50%;
+left: 50%;
+margin-right: -50%;
+transform: translate(-50%, -50%);
+} #particles-js {
+width: 100%;
+overflow:hidden;
+height: 500px;
+background-color: #7E3BD0 !important;
+background-image: url("");
+background-repeat: no-repeat;
+background-size: cover;
+background-position: 50% 50%;
+}
