@@ -2,7 +2,7 @@
 # This file is distributed under the same license as the WordPress - 4.8.x package.
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2017-06-26 14:07:37+0000\n"
+"PO-Revision-Date: 2017-06-27 08:48:19+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -5396,7 +5396,7 @@ msgstr "Options avancées"
 
 #: wp-includes/media-template.php:959
 msgid "Custom Size"
-msgstr "Taille personalisée"
+msgstr "Taille personnalisée"
 
 #: wp-includes/class-wp-editor.php:1175
 msgid "Split table cell"
