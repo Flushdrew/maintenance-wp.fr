@@ -7,30 +7,13 @@
 
 
 if ( ! defined( 'ET_CORE' ) ) {
+	// Note, this will be updated automatically during grunt release task.
+	define( 'ET_CORE_VERSION', '3.0.58' );
 	define( 'ET_CORE', true );
 } else if ( ! defined( 'ET_CORE_OVERRIDE' ) ) {
 	// Core has been loaded already and the override flag is not set.
 	return;
 }
-
-
-if ( ! function_exists( 'et_core_version' ) ):
-function et_core_version() {
-	$version = '2.0';
-
-	if ( function_exists( 'et_get_theme_version' ) ) {
-		$version = et_get_theme_version();
-	} else if ( false !== strpos( ET_CORE_PATH, 'divi-builder' ) ) {
-		$version = ET_BUILDER_PLUGIN_VERSION;
-	} else if ( false !== strpos( ET_CORE_PATH, 'bloom' ) ) {
-		$version = $GLOBALS['et_bloom']->plugin_version;
-	} else if ( false !== strpos( ET_CORE_PATH, 'monarch' ) ) {
-		$version = $GLOBALS['et_monarch']->plugin_version;
-	}
-
-	return $version;
-}
-endif;
 
 
 if ( ! function_exists( 'et_core_autoloader' ) ):
@@ -100,6 +83,22 @@ function et_core_autoloader( $class_name ) {
 endif;
 
 
+if ( ! function_exists( 'et_core_maybe_set_updated' ) ):
+function et_core_maybe_set_updated() {
+	// TODO: Move et_{*}_option() functions to core.
+	$last_core_version = get_option( 'et_core_version', '' );
+
+	if ( ET_CORE_VERSION === $last_core_version ) {
+		return;
+	}
+
+	update_option( 'et_core_version', ET_CORE_VERSION );
+
+	define( 'ET_CORE_UPDATED', true );
+}
+endif;
+
+
 if ( ! function_exists( 'et_new_core_setup') ):
 function et_new_core_setup() {
 	$core_path   = defined( 'ET_CORE_PATH_OVERRIDE' ) ? ET_CORE_PATH_OVERRIDE : ET_CORE_PATH;
@@ -107,12 +106,16 @@ function et_new_core_setup() {
 
 	require_once "{$core_path}functions.php";
 	require_once "{$core_path}components/Updates.php";
+	require_once "{$core_path}components/init.php";
 
 	if ( $has_php_52x ) {
 		spl_autoload_register( 'et_core_autoloader', true );
 	} else {
 		spl_autoload_register( 'et_core_autoloader', true, true );
 	}
+
+	// Initialize top-level components "group"
+	et_core_init();
 }
 endif;
 
@@ -132,11 +135,8 @@ function et_core_setup( $url ) {
 		define( 'ET_CORE_TEXTDOMAIN', 'et-core' );
 	}
 
-	if ( ! defined( 'ET_CORE_VERSION' ) ) {
-		define( 'ET_CORE_VERSION', et_core_version() );
-	}
-
 	load_theme_textdomain( 'et-core', ET_CORE_PATH . 'languages/' );
+	et_core_maybe_set_updated();
 	et_new_core_setup();
 
 	if ( is_admin() || ! empty( $_GET['et_fb'] ) ) {
